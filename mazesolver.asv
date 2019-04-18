@@ -18,9 +18,8 @@ function mazesolver(file)
     Igreen = I(:,:,2);
     Iblue = I(:,:,3);
     
-    [width, indicies] = getInfo(Ired);
-    %disp(width);
-    %return;
+    getInfo(Ired);
+    return;
     
     %get the indicies of the walls of the maze
     disp('Finding walls');
@@ -46,15 +45,6 @@ function mazesolver(file)
     g = addedge(g, a(1:size(a,1)-1, 1:size(a,2)-1), a(2:size(a,1), 2:size(a,2)));
     disp('Adding left diagonal edges');
     g = addedge(g, a(2:size(a,1), 1:size(a,2)-1), a(1:size(a,1)-1, 2:size(a,2)));
-%    disp('Adding horizontal edges');
-%    g = addedge(g, a(1:width:size(a,1), 1:width:size(a,2)-1), a(1:width:size(a,1), 2:width:size(a,2)));
-%    disp('Adding vertical edges');
-%    g = addedge(g, a(1:width:size(a,1)-1, 1:width:size(a,2)), a(2:width:size(a,1), 1:width:size(a,2)));
-%    disp('Adding right diagonal edges');
-%    g = addedge(g, a(1:width:size(a,1)-1, 1:width:size(a,2)-1), a(2:width:size(a,1), 2:width:size(a,2)));
-%    disp('Adding left diagonal edges');
-%    g = addedge(g, a(2:width:size(a,1), 1:width:size(a,2)-1), a(1:width:size(a,1)-1, 2:width:size(a,2)));
-%    disp('Done adding edges');
     disp('Done adding edges');
     
     %remove the nodes that correspond to the walls on the maze
@@ -63,8 +53,8 @@ function mazesolver(file)
     
     %find the start and end indicies
     %TODO dynamically find these values instead of hard coding
-    start = indicies(1, 1);
-    finish = indicies(2, 1);
+    start = dim*2+1;
+    finish = dim*dim-3;
     
     %find the shortest path through the graph from start to finish
     disp('Finding shortest path');
@@ -83,19 +73,15 @@ function mazesolver(file)
     imshow(I);
 end
 
-function [width, indicies] = getInfo(Ired)
-    %get dimentions of image
+function getInfo(Ired)
     [m, n] = size(Ired);
     
-    %get the edges of the image
     top = Ired(1,:);
     bottom = Ired(m,:);
     left = Ired(:,1);
     right = Ired(:,n);
     
-    
-    targets = [];   %the index of where the exit and entrance is
-    %test if there is an entrance in the top edge
+    targets = [];
     t = [find(top~=0, 1, 'first') find(top~=0, 1, 'last')];
     temp = 1;
     if isempty(t)
@@ -103,7 +89,7 @@ function [width, indicies] = getInfo(Ired)
         temp = [];
     end
     targets = [targets temp];
-    %test if there is an entrance in the bottom edge
+    
     b = [find(bottom~=0, 1, 'first') find(bottom~=0, 1, 'last')];
     temp = 2;
     if isempty(b)
@@ -111,7 +97,7 @@ function [width, indicies] = getInfo(Ired)
         temp = [];
     end
     targets = [targets temp];
-    %test if there is an entrance in the left edge
+    
     l = [find(left~=0, 1, 'first') find(left~=0, 1, 'last')];
     temp = 3;
     if isempty(l)
@@ -119,7 +105,7 @@ function [width, indicies] = getInfo(Ired)
         temp = [];
     end
     targets = [targets temp];
-    %test if there is an entrance in the right edge
+    
     r = [find(right~=0, 1, 'first') find(right~=0, 1, 'last')];
     temp = 4;
     if isempty(r)
@@ -128,16 +114,13 @@ function [width, indicies] = getInfo(Ired)
     end
     targets = [targets temp];
     
-    %add indices to matrix
     solutions = [t; b; l; r];
     
     %disp(solutions);
-    %disp(targets);
+    disp(targets);
     
-    %caclulate width
-    width = abs(solutions(targets(1), 1) - (solutions(targets(1), 2)+1));
+    width = solutions(target(1), 1) - solutions(target(1), 1);
     
-    %convert indice matrix to a vector in the original maze-space
     indicies = [];
     for i = targets
         switch i
@@ -152,6 +135,5 @@ function [width, indicies] = getInfo(Ired)
         end
         
     end
-    %disp(indicies);
 end
 
