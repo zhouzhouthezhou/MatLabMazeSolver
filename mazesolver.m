@@ -2,7 +2,7 @@ function mazesolver(file)
     %read image and break in down into rgb matricies
     disp('Reading image');
     Itemp = imread(file);
-    [dim, ~, depth] = size(Itemp);
+    [m, n, depth] = size(Itemp);
     if depth == 1
         disp('Converting to RGB');
         Itemp = double(Itemp);
@@ -32,8 +32,8 @@ function mazesolver(file)
     g = graph;
     %TODO dynamically find dim
     %dim = 1802;
-    index = 1:dim^2;
-    a = reshape(index, dim, dim);
+    index = 1:(m*n);
+    a = reshape(index, m, n);
     a = string(a);
     g = addnode(g, string(index));
     
@@ -42,10 +42,10 @@ function mazesolver(file)
     g = addedge(g, a(1:size(a,1), 1:size(a,2)-1), a(1:size(a,1), 2:size(a,2)));
     disp('Adding vertical edges');
     g = addedge(g, a(1:size(a,1)-1, 1:size(a,2)), a(2:size(a,1), 1:size(a,2)));
-    disp('Adding right diagonal edges');
-    g = addedge(g, a(1:size(a,1)-1, 1:size(a,2)-1), a(2:size(a,1), 2:size(a,2)));
-    disp('Adding left diagonal edges');
-    g = addedge(g, a(2:size(a,1), 1:size(a,2)-1), a(1:size(a,1)-1, 2:size(a,2)));
+    %disp('Adding right diagonal edges');
+    %g = addedge(g, a(1:size(a,1)-1, 1:size(a,2)-1), a(2:size(a,1), 2:size(a,2)));
+    %disp('Adding left diagonal edges');
+    %g = addedge(g, a(2:size(a,1), 1:size(a,2)-1), a(1:size(a,1)-1, 2:size(a,2)));
 %    disp('Adding horizontal edges');
 %    g = addedge(g, a(1:width:size(a,1), 1:width:size(a,2)-1), a(1:width:size(a,1), 2:width:size(a,2)));
 %    disp('Adding vertical edges');
@@ -148,7 +148,7 @@ function [width, indicies] = getInfo(Ired)
             case 3
                 indicies = [indicies; solutions(3, 1) solutions(3, 2)];
             case 4
-                indicies = [indicies; n*(n-1)+(solutions(4, 1)) n*(n-1)+(solutions(1, 2))];
+                indicies = [indicies; n*(m-1)+(solutions(4, 1)) n*(m-1)+(solutions(1, 2))];
         end
         
     end
