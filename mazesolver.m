@@ -27,11 +27,8 @@ function mazesolver(file)
     walls = find(~Ired);
     
     %construct a dim by dim graph that represents the maze png
-    %TODO make this work for non-square images
     disp('Generating Graph');
     g = graph;
-    %TODO dynamically find dim
-    %dim = 1802;
     index = 1:(m*n);
     a = reshape(index, m, n);
     a = string(a);
@@ -42,19 +39,11 @@ function mazesolver(file)
     g = addedge(g, a(1:size(a,1), 1:size(a,2)-1), a(1:size(a,1), 2:size(a,2)));
     disp('Adding vertical edges');
     g = addedge(g, a(1:size(a,1)-1, 1:size(a,2)), a(2:size(a,1), 1:size(a,2)));
-    %disp('Adding right diagonal edges');
-    %g = addedge(g, a(1:size(a,1)-1, 1:size(a,2)-1), a(2:size(a,1), 2:size(a,2)));
-    %disp('Adding left diagonal edges');
-    %g = addedge(g, a(2:size(a,1), 1:size(a,2)-1), a(1:size(a,1)-1, 2:size(a,2)));
-%    disp('Adding horizontal edges');
-%    g = addedge(g, a(1:width:size(a,1), 1:width:size(a,2)-1), a(1:width:size(a,1), 2:width:size(a,2)));
-%    disp('Adding vertical edges');
-%    g = addedge(g, a(1:width:size(a,1)-1, 1:width:size(a,2)), a(2:width:size(a,1), 1:width:size(a,2)));
-%    disp('Adding right diagonal edges');
-%    g = addedge(g, a(1:width:size(a,1)-1, 1:width:size(a,2)-1), a(2:width:size(a,1), 2:width:size(a,2)));
-%    disp('Adding left diagonal edges');
-%    g = addedge(g, a(2:width:size(a,1), 1:width:size(a,2)-1), a(1:width:size(a,1)-1, 2:width:size(a,2)));
-%    disp('Done adding edges');
+    %Uncomment the following 4 lines for a prettier path but slower execution time
+    disp('Adding right diagonal edges');
+    g = addedge(g, a(1:size(a,1)-1, 1:size(a,2)-1), a(2:size(a,1), 2:size(a,2)));
+    disp('Adding left diagonal edges');
+    g = addedge(g, a(2:size(a,1), 1:size(a,2)-1), a(1:size(a,1)-1, 2:size(a,2)));
     disp('Done adding edges');
     
     %remove the nodes that correspond to the walls on the maze
@@ -62,7 +51,6 @@ function mazesolver(file)
     g = rmnode(g, string(walls));
     
     %find the start and end indicies
-    %TODO dynamically find these values instead of hard coding
     start = indicies(1, 1);
     finish = indicies(2, 1);
     
